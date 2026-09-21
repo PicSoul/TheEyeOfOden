@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace TheEyeofOden.Radar
+namespace TheEyeOfOden.Radar
 {
     public class RadarMarker : MonoBehaviour
     {

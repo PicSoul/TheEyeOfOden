@@ -1,7 +1,7 @@
 using HarmonyLib;
-using TheEyeofOden.Radar;
+using TheEyeOfOden.Radar;
 
-namespace TheEyeofOden.Patches
+namespace TheEyeOfOden.Patches
 {
     [HarmonyPatch(typeof(Minimap))]
     public static class MinimapPatch

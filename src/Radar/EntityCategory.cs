@@ -1,4 +1,4 @@
-namespace TheEyeofOden.Radar
+namespace TheEyeOfOden.Radar
 {
     public enum EntityCategory
     {

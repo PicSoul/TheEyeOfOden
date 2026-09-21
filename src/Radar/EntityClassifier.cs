@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace TheEyeofOden.Radar
+namespace TheEyeOfOden.Radar
 {
     public struct EntityClassification
     {

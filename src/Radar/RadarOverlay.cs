@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace TheEyeofOden.Radar
+namespace TheEyeOfOden.Radar
 {
     public static class RadarOverlay
     {

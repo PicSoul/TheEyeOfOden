@@ -1,8 +1,8 @@
 using BepInEx.Configuration;
 using UnityEngine;
-using TheEyeofOden.Radar;
+using TheEyeOfOden.Radar;
 
-namespace TheEyeofOden
+namespace TheEyeOfOden
 {
     public static class ModConfig
     {

@@ -40,10 +40,10 @@ function RequireValheimClosed {
 
 function SetLoaded([bool]$loaded) {
     RequireValheimClosed
-    $dir = Join-Path (PluginRoot) "PICS0UL-TheEyeofOden"
+    $dir = Join-Path (PluginRoot) "PICS0UL-TheEyeOfOden"
     if (-not (Test-Path $dir)) { Fail "not installed; run .\build.ps1 -Install first" }
 
-    $live = Join-Path $dir "TheEyeofOden.dll"
+    $live = Join-Path $dir "TheEyeOfOden.dll"
     $off = "$live.old"
 
     if ($loaded) {
@@ -79,16 +79,16 @@ if ($Enable) {
     exit 0
 }
 
-$csproj = [xml](Get-Content "$root\TheEyeofOden.csproj")
+$csproj = [xml](Get-Content "$root\TheEyeOfOden.csproj")
 $version = $csproj.Project.PropertyGroup.Version | Where-Object { $_ } | Select-Object -First 1
 Write-Host "`nThe Eye of Oden $version" -ForegroundColor Cyan
 
 Write-Host "`nbuilding..." -ForegroundColor Cyan
-$log = & dotnet build "$root\TheEyeofOden.csproj" -c Release -v minimal --nologo 2>&1
+$log = & dotnet build "$root\TheEyeOfOden.csproj" -c Release -v minimal --nologo 2>&1
 if ($LASTEXITCODE -ne 0) { $log; Fail "build failed" }
 Ok "compiled"
 
-$dll = "$root\bin\Release\TheEyeofOden.dll"
+$dll = "$root\bin\Release\TheEyeOfOden.dll"
 if (-not (Test-Path $dll)) { Fail "expected output missing: $dll" }
 
 if (-not $Install) { Write-Host "`ndone.`n" -ForegroundColor Cyan; exit 0 }
@@ -98,13 +98,13 @@ Write-Host "`ninstalling to profile '$Profile'..." -ForegroundColor Cyan
 RequireValheimClosed
 $pluginRoot = PluginRoot
 
-$target = Join-Path $pluginRoot "PICS0UL-TheEyeofOden"
+$target = Join-Path $pluginRoot "PICS0UL-TheEyeOfOden"
 if (-not (Test-Path $target)) { New-Item -ItemType Directory -Path $target | Out-Null }
 Copy-Item $dll $target -Force
 
 # A stale .old beside a fresh DLL would leave -Enable and -Disable disagreeing
 # about which file is the real one; installing always means enabled.
-Remove-Item (Join-Path $target "TheEyeofOden.dll.old") -Force -ErrorAction SilentlyContinue
+Remove-Item (Join-Path $target "TheEyeOfOden.dll.old") -Force -ErrorAction SilentlyContinue
 Ok "installed to $(Split-Path $target -Leaf)"
 
 Write-Host "`ndone.`n" -ForegroundColor Cyan

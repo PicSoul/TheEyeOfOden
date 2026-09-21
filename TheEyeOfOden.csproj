@@ -8,15 +8,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <AssemblyName>TheEyeofOden</AssemblyName>
-    <RootNamespace>TheEyeofOden</RootNamespace>
+    <AssemblyName>TheEyeOfOden</AssemblyName>
+    <RootNamespace>TheEyeOfOden</RootNamespace>
     <Version>0.1.0</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-    <AssemblyTitle>TheEyeofOden</AssemblyTitle>
-    <Product>TheEyeofOden</Product>
+    <AssemblyTitle>TheEyeOfOden</AssemblyTitle>
+    <Product>TheEyeOfOden</Product>
     <Authors>PICS0UL</Authors>
     <DebugType>none</DebugType>
     <!-- Reference assemblies are conflicting Unity/netstandard facades; the noise is expected. -->

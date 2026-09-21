@@ -6,9 +6,9 @@ using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
-using TheEyeofOden.Radar;
+using TheEyeOfOden.Radar;
 
-namespace TheEyeofOden
+namespace TheEyeOfOden
 {
     [BepInPlugin(PluginGuid, PluginName, PluginVersion)]
     public sealed class EyeOfOdenPlugin : BaseUnityPlugin
