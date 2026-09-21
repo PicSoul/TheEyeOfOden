@@ -1,0 +1,7 @@
+<!-- Machine-specific build paths template. Copy to Local.props. -->
+<Project>
+  <PropertyGroup>
+    <ValheimInstall>C:\Program Files (x86)\Steam\steamapps\common\Valheim</ValheimInstall>
+    <BepInExCore>$(ValheimInstall)\BepInEx\core</BepInExCore>
+  </PropertyGroup>
+</Project>
