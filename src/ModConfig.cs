@@ -1,4 +1,5 @@
-using BepInEx.Configuration;
+﻿using BepInEx.Configuration;
+using ServerSync;
 using UnityEngine;
 using TheEyeOfOden.Radar;
 
@@ -42,9 +43,61 @@ namespace TheEyeOfOden
         public static ConfigEntry<Color> PlayerColor { get; private set; }
         public static ConfigEntry<Color> NpcColor { get; private set; }
 
-        public static void Bind(ConfigFile config)
+        /// <summary>
+        /// Whether the settings the server decides are actually enforced on clients.
+        ///
+        /// Synchronising a value and enforcing it are two different things. Without this, a
+        /// server hands its values to clients on connect and a client may still edit them
+        /// afterwards - which is the right default for a friendly server, where the sync is a
+        /// convenience rather than a rule. Turning it on makes those settings read-only for
+        /// everyone but an admin, which is what a public server wants.
+        ///
+        /// Only an admin can change it, because it is itself a synced setting and the server
+        /// is the one that decides.
+        /// </summary>
+        public static ConfigEntry<bool> LockServerSettings;
+
+        private static ConfigSync _sync;
+
+        /// <summary>
+        /// Marks a setting as one the server decides.
+        ///
+        /// A radar is a different thing on a co-op server than it is in single player. Seeing
+        /// every hostile through a hill is a convenience when the only thing at stake is your
+        /// own evening; seeing every other player through that hill, on a server where people
+        /// fight each other, is not. So the range and the two filters that reveal people -
+        /// other players and how far the whole thing sees - are the server's to set, and a PvP
+        /// server can switch them off for everyone who has the mod.
+        ///
+        /// Everything else is appearance and preference: colours, dot sizes, which map it draws
+        /// on, the toggle key. None of that is a server's business.
+        ///
+        /// Single player and a server without the mod both leave every value as your config
+        /// file has it.
+        /// </summary>
+        private static ConfigEntry<T> Synced<T>(ConfigEntry<T> entry)
         {
+            if (_sync != null)
+            {
+                SyncedConfigEntry<T> synced = _sync.AddConfigEntry(entry);
+                synced.SynchronizedConfig = true;
+            }
+
+            return entry;
+        }
+
+        public static void Bind(ConfigFile config, ConfigSync sync = null)
+        {
+            _sync = sync;
+
             // General
+            LockServerSettings = config.Bind("5. Server", "LockSettings", false,
+                "Enforce the server's values for radar range and showing other players, rather "
+                + "than only handing them out. Off means a client may still change them "
+                + "afterwards; on makes them read-only for everyone but an admin, which is what "
+                + "a PvP server wants. Ignored in single player.");
+            if (sync != null) { sync.AddLockingConfigEntry(LockServerSettings); }
+
             ModEnabled = config.Bind(
                 "1. General",
                 "Enabled",
@@ -57,12 +110,12 @@ namespace TheEyeOfOden
                 new KeyboardShortcut(KeyCode.None),
                 "Optional hotkey to toggle the radar on and off in-game.");
 
-            RadarRange = config.Bind(
+            RadarRange = Synced(config.Bind(
                 "1. General",
                 "RadarRange",
                 120f,
                 new ConfigDescription("Maximum detection radius around the player in meters. Set to 0 for unlimited loaded zone range.",
-                    new AcceptableValueRange<float>(0f, 500f)));
+                    new AcceptableValueRange<float>(0f, 500f))));
 
             ShowOnSmallMap = config.Bind(
                 "1. General",
@@ -113,11 +166,11 @@ namespace TheEyeOfOden
                 true,
                 "Display boss creatures on the radar.");
 
-            ShowOtherPlayers = config.Bind(
+            ShowOtherPlayers = Synced(config.Bind(
                 "2. Filters",
                 "ShowOtherPlayers",
                 true,
-                "Display other players in multiplayer on the radar.");
+                "Display other players in multiplayer on the radar."));
 
             ShowNpcs = config.Bind(
                 "2. Filters",

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -6,6 +6,7 @@ using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
+using ServerSync;
 using TheEyeOfOden.Radar;
 
 namespace TheEyeOfOden
@@ -20,13 +21,26 @@ namespace TheEyeOfOden
         internal static ManualLogSource Log { get; private set; }
         private Harmony _harmony;
 
+        /// <summary>
+        /// Lets a server set the two things a radar can give an unfair edge with, and nothing
+        /// else. ModRequired stays false: this draws dots on your own map and changes nothing
+        /// anyone else can see, so a player without it belongs on the server as much as anyone.
+        /// </summary>
+        private readonly ConfigSync _configSync = new ConfigSync(PluginGuid)
+        {
+            DisplayName = PluginName,
+            CurrentVersion = PluginVersion,
+            MinimumRequiredVersion = PluginVersion,
+            ModRequired = false
+        };
+
         internal static readonly List<string> FailedPatches = new List<string>();
 
         private void Awake()
         {
             Log = Logger;
 
-            ModConfig.Bind(Config);
+            ModConfig.Bind(Config, _configSync);
 
             string pluginDir = Path.GetDirectoryName(Info.Location);
             EntityIconResolver.Initialize(pluginDir);
